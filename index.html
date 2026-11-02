@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测测你在《狂飙》里能躲过几轮风浪</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "SimSun", "STSong", "Microsoft YaHei", serif;
+        }
+        body {
+            background-color: #b8a898;
+            background-image: radial-gradient(circle at 15% 20%, #c9b9a9 0%, transparent 45%), radial-gradient(circle at 85% 75%, #998877 0%, transparent 40%);
+            color: #3a2f26;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+        /* 首页 */
+        .start-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+            text-align: center;
+            gap: 22px;
+        }
+        .start-page h1 {
+            font-size: 30px;
+            color: #2c241d;
+            letter-spacing: 3px;
+            text-shadow: 0 0 8px #d4c5b580;
+        }
+        .start-page p {
+            color: #504338;
+            line-height: 1.7;
+            max-width: 520px;
+            font-size: 16px;
+        }
+        .start-btn {
+            margin-top: 12px;
+            padding: 13px 38px;
+            background: linear-gradient(135deg,#705c4b,#4f4034);
+            border: 1px solid #8c7968;
+            color: #f0e8df;
+            font-size: 17px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .start-btn:hover {
+            border-color:#b49e89;
+            box-shadow: 0 0 14px #705c4b55;
+        }
+        /* 答题页 */
+        .quiz-page {
+            display: none;
+        }
+        .progress-wrap {
+            width:100%;
+            height:7px;
+            background:#a09080;
+            border-radius:99px;
+            overflow:hidden;
+            margin-bottom:28px;
+        }
+        .progress-bar {
+            height:100%;
+            background: linear-gradient(90deg,#6b5646,#4b3c31);
+            transition: width 0.4s ease;
+        }
+        .q-index {
+            color:#66574a;
+            font-size:14px;
+            margin-bottom:8px;
+        }
+        .question {
+            font-size:21px;
+            color:#2c241d;
+            margin-bottom:26px;
+            line-height:1.6;
+        }
+        .option-list {
+            display:flex;
+            flex-direction:column;
+            gap:13px;
+            margin-bottom:24px;
+        }
+        .option-item {
+            padding:15px 18px;
+            background: rgba(220, 208, 196, 0.62);
+            backdrop-filter: blur(7px);
+            border:1px solid #9c8b7b;
+            border-radius:8px;
+            cursor:pointer;
+            transition: all 0.3s ease;
+            color:#44382e;
+            font-size:15px;
+        }
+        .option-item:hover {
+            background:rgba(200,184,168,0.75);
+            border-color:#7d6a59;
+            transform: translateY(-1px);
+        }
+        .bottom-ctrl{
+            display:flex;
+            justify-content:flex-start;
+        }
+        .prev-btn{
+            padding:9px 20px;
+            background: rgba(170,156,142,0.65);
+            backdrop-filter: blur(6px);
+            border:1px solid #8c7867;
+            color:#4f4034;
+            border-radius:7px;
+            cursor:pointer;
+        }
+        .prev-btn:disabled{
+            opacity:0.38;
+            cursor:not-allowed;
+        }
+        /* 结果页 */
+        .result-page {
+            display:none;
+            min-height:90vh;
+            padding-top:36px;
+        }
+        .result-card {
+            background: rgba(212, 200, 186, 0.65);
+            backdrop-filter: blur(10px);
+            border:1px solid #8c7968;
+            border-radius:14px;
+            padding:30px 26px;
+            text-align:center;
+            box-shadow: 0 0 24px #705c4b33;
+        }
+        .result-title {
+            font-size:26px;
+            color:#2c241d;
+            margin-bottom:12px;
+            letter-spacing:2px;
+        }
+        .result-desc {
+            color:#44382e;
+            line-height:1.8;
+            text-align:left;
+            margin:18px 0;
+        }
+        .result-reason {
+            margin-top:18px;
+            padding-top:18px;
+            border-top:1px solid #9c8b7b;
+            text-align:left;
+            color:#504338;
+            line-height:1.7;
+        }
+        .restart-btn {
+            margin-top:28px;
+            padding:11px 30px;
+            background: linear-gradient(135deg,#705c4b,#4f4034);
+            border: 1px solid #8c7968;
+            color:#f0e8df;
+            border-radius:8px;
+            cursor:pointer;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        @keyframes fadeIn {
+            from {opacity:0; filter: blur(3px);}
+            to {opacity:1; filter: blur(0px);}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 首页 -->
+    <div class="start-page" id="startPage">
+        <h1>测测你在《狂飙》里能躲过几轮风浪</h1>
+        <p>京海风云翻涌，旧厂街的人情、利益、暗流交织。<br>24道由剧中人递来的两难抉择，没有直白好坏。<br>看看你能在这场二十年的风浪里，走到哪一步。</p>
+        <button class="start-btn" onclick="startQuiz()">踏入京海</button>
+    </div>
+
+    <!-- 答题页 -->
+    <div class="quiz-page" id="quizPage">
+        <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="q-index" id="qIndex"></div>
+        <div class="question" id="questionText"></div>
+        <div class="option-list" id="optionBox"></div>
+        <div class="bottom-ctrl">
+            <button class="prev-btn" id="prevBtn" onclick="goPrev()">上一题</button>
+        </div>
+    </div>
+
+    <!-- 结果页 -->
+    <div class="result-page" id="resultPage">
+        <div class="result-card fade-in">
+            <h2 class="result-title" id="resName"></h2>
+            <div class="result-desc" id="resIntro"></div>
+            <div class="result-reason" id="resAnalyse"></div>
+            <button class="restart-btn" onclick="restartTest()">重新入局</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// 24题：题干由狂飙角色发起难题，选项两难隐晦，不直白
+const questionList = [
+    {
+        q:"高启强托你帮他传一句话给别人，事情看着不大，但你隐约知道会牵扯一场纠纷，你？",
+        opt:["应下来，留个心眼观察后续走向","委婉推脱，不愿沾这类麻烦","答应，但会悄悄摸清全部内情","找理由躲开，不掺和两边"]
+    },
+    {
+        q:"安欣私下找到你，向你打听一个人的消息，他没有搜查手续，只是凭直觉追查，你？",
+        opt:["斟酌着透露一点无关紧要的信息","如实说出你知道的全部情况","闭口不谈，不想卷入这场对峙","含糊其辞，两边都不得罪"]
+    },
+    {
+        q:"高启盛找你入伙做一门来钱很快的生意，他只跟你描绘收益，避开风险不谈，你？",
+        opt:["先观望，等看清路子再决定","直接拒绝安稳度日","愿意跟着试一试，共担风险","少量参与，不把全部身家押上"]
+    },
+    {
+        q:"老默来拜托你帮忙藏一样东西，他不肯细说缘由，只说事情关乎他女儿的安稳，你？",
+        opt:["权衡轻重，斟酌要不要搭手","直接拒绝，守住自己边界","答应帮忙，但和他划清底线","想办法劝他换别的出路"]
+    },
+    {
+        q:"唐小虎带着饭局邀约来找你，桌上坐着京海有头有脸的人物，话里要你表态站队，你？",
+        opt:["赴宴，说话留三分不交底","找借口推辞不去","到场顺势迎合众人态度","到场主动把话题引开"]
+    },
+    {
+        q:"莽村李宏伟找上你，想用好处换你隐瞒一件对他不利的事，代价你一时看不清，你？",
+        opt:["收下好处，闭口不提此事","拒绝，不接受这种交易","假意应承，暗中留存线索","先拖着，不立刻答复"]
+    },
+    {
+        q:"安欣提醒你，你交好的人正在走向深渊，劝你尽早切割关系，你？",
+        opt:["不动声色慢慢疏远对方","相信安欣，立刻断绝往来","试着劝说对方及时收手","继续来往，守住自身底线"]
+    },
+    {
+        q:"高启强送给你一份厚礼，算是一份人情，日后大概率会找你还人情，你？",
+        opt:["收下人情，默默记下这份牵绊","委婉推掉，不想被人情捆绑","收下，提前想好偿还的代价","先收下，后续伺机退回"]
+    },
+    {
+        q:"唐小龙来找你，希望你帮忙掩盖一件已经发生的祸事，许诺给你丰厚回报，你？",
+        opt:["不到绝境绝不趟这趟浑水","寻找稳妥办法避开牵连","权衡代价，必要时舍弃线索","拒绝，不参与掩盖"]
+    },
+    {
+        q:"赵立冬的人暗示你对某些事情放宽尺度，事成之后会给你便利，你？",
+        opt:["表面应承，实际守住底线","顺着对方意思照做维持关系","找理由推脱，不接这个事","点明这件事潜藏的巨大风险"]
+    },
+    {
+        q:"高启强与赵立冬两边都派人拉拢你，都许诺能给你想要的资源，你？",
+        opt:["保持中立，哪边都不投靠","选择胜算更大的一方依附","虚与委蛇，两边周旋","直接回绝所有拉拢"]
+    },
+    {
+        q:"你发现高启强对你隐瞒了关键内情，这件事一旦爆发会牵连到你，你？",
+        opt:["不动声色，慢慢核实真相","直接当面问清楚隐瞒缘由","降低信任，不再交付底牌","装作不知情，照常相处"]
+    },
+    {
+        q:"高启盛提出，牺牲一个无关的人，就能抹平眼下这场危机，问你的看法，你？",
+        opt:["不认同，但无力扭转局面","坚决不参与牺牲他人","权衡局势接受残酷安排","尝试寻找两全的办法"]
+    },
+    {
+        q:"老默给你一笔钱，说是答谢费，你察觉这笔钱的来路并不干净，你？",
+        opt:["拒绝收下，避免沾上边","收下，和对方划清边界","收下之后尽快转为稳妥资产","先收下，看后续情况退回"]
+    },
+    {
+        q:"曾经和你有过节的李有田落难，托人传话愿意让利求和，希望和你放下恩怨，你？",
+        opt:["谨慎接纳，持续提防对方","拒绝和解，恩怨不松口","顺势和解，少一个敌人","有限合作，只谈利益不谈情"]
+    },
+    {
+        q:"高启强给你铺好了一条往上走的路，但前提是要放下你一直坚守的原则，你？",
+        opt:["放弃这条路守住本心","可以变通，底线不动摇","抓住机会接受取舍","反复纠结迟迟无法决定"]
+    },
+    {
+        q:"安欣匆匆找到你，手里线索真假未定，催促你马上做决定配合他行动，你？",
+        opt:["暂缓行动，核实核心信息","凭经验快速做出判断","稳妥起见选择保守方案","跟着多数人的选择走"]
+    },
+    {
+        q:"唐小虎告诉你，嫁祸旁人就能帮你躲过一场大祸，证据很难查到你头上，你？",
+        opt:["不会选择嫁祸他人","不到生死关头绝不考虑","衡量后果再决定","优先保全自己平安"]
+    },
+    {
+        q:"你的家人劝你远离高启强这一伙人，趁早抽身离开京海的纷争，你？",
+        opt:["听从劝告及时停下脚步","舍不得已经到手的一切","表面答应暗地里继续","想办法把家人摘出去"]
+    },
+    {
+        q:"高启强风光时，不少依附他的人围着你示好，你清楚大多是趋利而来，你？",
+        opt:["体面交往，不交真心","坦然接纳这份追捧","刻意拉开距离","挑选少数人深交"]
+    },
+    {
+        q:"高启强问你，如果出事，能不能把一些事情揽到自己身上换取其他人平安，你？",
+        opt:["不会替人揽下罪责","不到绝境绝不考虑","看代价轻重再权衡","优先保全大局"]
+    },
+    {
+        q:"你提前收到消息，高启强这盘棋快要崩塌，有人来劝你趁早切割干净，你？",
+        opt:["早早抽身切割干净","不踩一脚，也不伸手帮忙","落井下石撇清关联","暗中留一点体面"]
+    },
+    {
+        q:"如果回到旧厂街鱼档那天，高启强还没走上这条路，你遇到困在底层的他，你？",
+        opt:["和他一样接受命运结局","只想安稳避开所有纠葛","依旧挣扎，换一种活法","说不清命运很难重来"]
+    },
+    {
+        q:"在京海漫长的风浪里，安欣和高启强走了两条路，你心里最怕的是？",
+        opt:["丢掉心里原本坚守的东西","身边亲近之人受到伤害","到手的一切化为泡影","长久活在提心吊胆之中"]
+    }
+];
+
+// 6种结果，完全保留原版剧情结局文案不变
+const resultList = [
+    {
+        name:"【安稳普通人 · 躲过第一轮风浪】",
+        intro:"你是京海里千千万万普通百姓之一，安于本分，不贪心、不踏红线。早年摆摊谋生，遇到麻烦优先避让，不掺和江湖恩怨，不贪恋快钱。高启强的棋局、官场的博弈，和你的人生隔着一层墙。你不会卷入核心漩涡，安稳过完日子，但也很难护住身边人遇上突发横祸。",
+        analyse:"你的选择偏向保守避险，拒绝灰色收益，不愿欠下复杂人情，不参与站队博弈。风浪刚起的时候你就及时避开了，京海二十年的滔天巨浪，卷不到你的身上。"
+    },
+    {
+        name:"【早期入局 · 止步莽村风波】",
+        intro:"你有一点胆量，懂得变通，为了日子更好愿意冒险，但心里留着底线。能看懂人情往来，会接受人情、结交人脉，可一旦事情开始沾染人命与深重罪恶，你会及时收手。莽村争斗就是你的终点，再往后建工集团、白金瀚的深层泥潭，你不会踏进去。",
+        analyse:"你愿意抓住机遇，懂得经营关系，但无法接受彻底泯灭良知的选择。你能熬过前期小规模冲突，却扛不住后期不断加码的黑暗，在风暴升级前抽身离场。"
+    },
+    {
+        name:"【游走中间人 · 扛到赵立冬登场】",
+        intro:"你属于京海的灰色中间人，八面玲珑，擅长周旋各方势力。哪边都不得罪，哪边都能搭上话，懂饭局规则、藏得住秘密，懂得用信息和人情换取生存空间。你可以跟着风浪走到赵立冬这一层的博弈，但你没有足够硬的靠山，一旦高层洗牌，你很容易被当成弃子清扫。",
+        analyse:"你精通权衡利弊，擅长中立虚与委蛇，习惯留后手自保。你能在多方夹缝里长期生存，可是没有坚定立场，当顶层格局重整，你就是最先被牺牲的棋子。"
+    },
+    {
+        name:"【同路浮沉者 · 陪到强盛集团落幕】",
+        intro:"你和高启强一路同行很久，看懂了京海生存法则，放下很多原则换取地位与财富。你敢赌、敢站队，能接纳灰色交易，也习惯用利益衡量人情。你可以跟着强盛走到鼎盛时期，但你的根基绑在这艘船上，大船沉没时，你很难独善其身，结局早已和集团绑定。",
+        analyse:"你愿意为收益不断放宽底线，重视利益捆绑，习惯和势力深度绑定。风浪最大的黄金岁月你都在场，但是一荣俱荣一损俱损，主船倾覆，你逃不掉清算。"
+    },
+    {
+        name:"【执棋入局人 · 直面最终清算】",
+        intro:"你是棋局里的核心角色，野心足够大，敢布局、敢取舍，人情可以为目标让路。你清楚每一步代价，主动搅动京海风云，是风浪本身的制造者之一。二十年所有关卡你全部闯过，走到风暴最中心，风光一时，但纸终究包不住火，最后迎来法网的清算。",
+        analyse:"你的选择优先保全自身与目标，愿意牺牲他人、接受残酷规则，擅长布局和掩盖痕迹。你熬过了全部轮次风浪，走到最后，只是这条路从一开始就没有善终选项。"
+    },
+    {
+        name:"【守灯追光者 · 逆风走完二十年】",
+        intro:"你像安欣，在浊浪滔天的京海独自守住本心。见过利益诱惑、人情裹挟、同僚摇摆、威胁恐吓，无数次机会摆在面前，只要妥协就能轻松上岸，但你始终没有偏移底线。二十年风浪一轮不落，你全程身在漩涡中心，受尽孤立煎熬，却一直站在光明一侧等到云开雾散。",
+        analyse:"你的选择始终守住底线，拒绝嫁祸、拒绝牺牲他人，不被利益收买，不畏惧强权。京海所有风浪你全部直面扛下，你不会被黑暗同化，是漫长黑夜里坚持到最后的人。"
+    }
+];
+const dimensionNames = [
+    "安稳避世",
+    "浅尝即止",
+    "夹缝周旋",
+    "浮沉同路",
+    "执棋博弈",
+    "守心追光"
+];
+
+// 计分映射：适配新的24道角色触发题目
+const scoreMap = [
+    [[2,3,4,1,3,0],[0,4,1,0,0,4],[1,2,3,4,2,1],[4,1,0,2,0,2]],
+    [[0,4,1,0,0,4],[4,1,0,2,0,2],[2,1,3,4,3,1],[3,2,2,2,2,1]],
+    [[2,3,2,3,1,1],[4,1,0,2,0,2],[1,1,4,3,3,0],[3,2,2,2,2,1]],
+    [[3,2,2,2,2,1],[4,1,0,2,0,2],[2,3,2,3,1,1],[0,4,0,1,0,4]],
+    [[2,3,3,2,1,0],[4,1,0,2,0,2],[1,1,4,3,3,0],[0,4,0,1,0,4]],
+    [[2,3,3,2,1,0],[4,1,0,2,0,2],[0,4,0,1,0,4],[3,2,2,2,2,1]],
+    [[2,3,2,3,1,1],[0,4,0,1,0,4],[1,2,3,4,2,1],[3,2,2,2,2,1]],
+    [[2,3,3,2,1,0],[4,1,0,2,0,2],[1,2,4,3,3,0],[3,2,2,2,2,1]],
+    [[2,3,3,2,1,0],[0,4,0,1,0,4],[1,2,4,3,3,0],[4,1,0,2,0,2]],
+    [[2,3,3,2,1,0],[3,1,2,3,2,1],[4,1,0,2,0,2],[0,4,0,1,0,4]],
+    [[2,3,3,2,1,0],[1,1,4,3,3,0],[3,1,2,3,2,1],[0,4,0,1,0,4]],
+    [[2,3,3,2,1,0],[0,4,0,1,0,4],[1,2,4,3,3,0],[3,2,2,2,2,1]],
+    [[3,2,2,2,2,1],[0,4,0,1,0,4],[1,1,4,3,3,0],[2,3,2,3,1,1]],
+    [[4,1,0,2,0,2],[1,1,4,3,3,0],[2,3,2,3,1,1],[3,2,2,2,2,1]],
+    [[2,3,3,2,1,0],[4,1,0,2,0,2],[1,1,4,3,3,0],[3,1,2,3,2,1]],
+    [[4,1,0,2,0,2],[2,3,2,3,1,1],[1,1,4,3,3,0],[3,2,2,2,2,1]],
+    [[2,3,3,2,1,0],[0,4,0,1,0,4],[3,2,2,2,2,1],[1,1,4,3,3,0]],
+    [[4,1,0,2,0,2],[0,4,0,1,0,4],[1,1,4,3,3,0],[2,3,2,3,1,1]],
+    [[4,1,0,2,0,2],[1,1,4,3,3,0],[2,3,2,3,1,1],[3,1,2,3,2,1]],
+    [[2,3,3,2,1,0],[1,1,4,3,3,0],[4,1,0,2,0,2],[3,2,2,2,2,1]],
+    [[4,1,0,2,0,2],[0,4,0,1,0,4],[1,1,4,3,3,0],[2,3,2,3,1,1]],
+    [[2,3,3,2,1,0],[0,4,0,1,0,4],[1,1,4,3,3,0],[3,1,2,3,2,1]],
+    [[1,1,4,3,3,0],[4,1,0,2,0,2],[2,3,2,3,1,1],[3,2,2,2,2,1]],
+    [[4,1,0,2,0,2],[0,4,0,1,0,4],[1,1,4,3,3,0],[2,3,2,3,1,1]]
+];
+
+let currentQ = 0;
+let score = [0,0,0,0,0,0];
+let answerRecord = [];
+const totalQ = questionList.length;
+
+function startQuiz(){
+    document.getElementById("startPage").style.display="none";
+    document.getElementById("quizPage").style.display="block";
+    renderQuestion();
+}
+
+function renderQuestion(){
+    const q = questionList[currentQ];
+    document.getElementById("qIndex").innerText = `题目 ${currentQ+1}/${totalQ}`;
+    document.getElementById("questionText").innerText = q.q;
+    document.getElementById("optionBox").innerHTML = "";
+    document.getElementById("progressBar").style.width = ((currentQ)/totalQ*100)+"%";
+    const prevBtn = document.getElementById("prevBtn");
+    prevBtn.disabled = currentQ === 0;
+
+    q.opt.forEach((optStr,idx)=>{
+        const div = document.createElement("div");
+        div.className="option-item fade-in";
+        div.innerText = optStr;
+        div.onclick = ()=>selectOption(idx);
+        document.getElementById("optionBox").appendChild(div);
+    })
+}
+
+function selectOption(optIdx){
+    answerRecord[currentQ] = optIdx;
+    const add = scoreMap[currentQ][optIdx];
+    for(let i=0;i<6;i++) score[i] += add[i];
+
+    currentQ++;
+    if(currentQ >= totalQ){
+        showResult();
+    }else{
+        renderQuestion();
+    }
+}
+
+function goPrev(){
+    if(currentQ <= 0) return;
+    currentQ--;
+    const lastOpt = answerRecord[currentQ];
+    const sub = scoreMap[currentQ][lastOpt];
+    for(let i=0;i<6;i++) score[i] -= sub[i];
+    renderQuestion();
+}
+
+function showResult(){
+    document.getElementById("quizPage").style.display="none";
+    document.getElementById("resultPage").style.display="block";
+    let maxScore = Math.max(...score);
+    let candidates = [];
+    for(let i=0;i<6;i++){
+        if(score[i] === maxScore) candidates.push(i);
+    }
+    const resIdx = candidates[Math.floor(Math.random()*candidates.length)];
+    const res = resultList[resIdx];
+
+    document.getElementById("resName").innerText = res.name;
+    document.getElementById("resIntro").innerText = res.intro;
+    document.getElementById("resAnalyse").innerText = res.analyse;
+}
+
+function restartTest(){
+    currentQ = 0;
+    score = [0,0,0,0,0,0];
+    answerRecord = [];
+    document.getElementById("resultPage").style.display="none";
+    document.getElementById("startPage").style.display="flex";
+}
+</script>
+</body>
+</html>
